@@ -6,6 +6,7 @@ const path = require("path");
 const userRoutes = require("./routes/user");
 const sauceRoutes = require("./routes/sauce");
 
+// Connexion à la DB
 mongoose
   .connect(
     `mongodb+srv://${process.env.DB_USER_PASS}@cluster0.iq56q.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
@@ -17,6 +18,7 @@ mongoose
 app.use(express.json());
 
 app.use((req, res, next) => {
+  // On gère le CORS pour autoriser toutes les requêtes
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",

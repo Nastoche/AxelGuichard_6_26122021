@@ -3,11 +3,12 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 exports.signup = (req, res, next) => {
+  // Enregistrement d'un nouvel utilisateur dans la DB (création de compte)
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
       const user = new User({
-        email: req.body.email, // à crypter
+        email: req.body.email,
         password: hash,
       });
       user
@@ -19,6 +20,7 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
+  // Connexion à un compte utilisateur déjà existant (en récupérant l'email dans la DB)
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
@@ -32,9 +34,13 @@ exports.login = (req, res, next) => {
           }
           res.status(200).json({
             userId: user._id,
-            token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
-              expiresIn: "24h",
-            }),
+            token: jwt.sign(
+              { userId: user._id },
+              process.env.RANDOM_TOKEN_SECRET,
+              {
+                expiresIn: "24h",
+              }
+            ),
           });
         })
         .catch((error) => res.status(500).json({ error }));

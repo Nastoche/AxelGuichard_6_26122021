@@ -1,6 +1,7 @@
 const Sauce = require("../models/Sauce");
 
 exports.likeSauce = (userId, sauceId, res) => {
+  // Ajouter un like à une sauce
   Sauce.updateOne(
     { _id: sauceId },
     { $push: { usersLiked: userId }, $inc: { likes: +1 } }
@@ -10,6 +11,7 @@ exports.likeSauce = (userId, sauceId, res) => {
 };
 
 exports.unlikeSauce = (userId, sauceId, res) => {
+  // Enlever un like ou un dislike mis au préalable à une sauce
   Sauce.findOne({ _id: sauceId })
     .then((sauce) => {
       if (sauce.usersLiked.includes(userId)) {
@@ -33,6 +35,7 @@ exports.unlikeSauce = (userId, sauceId, res) => {
 };
 
 exports.dislikeSauce = (userId, sauceId, res) => {
+  // Ajouter un dislike à une sauce
   Sauce.updateOne(
     { _id: sauceId },
     { $push: { usersDisliked: userId }, $inc: { dislikes: +1 } }
